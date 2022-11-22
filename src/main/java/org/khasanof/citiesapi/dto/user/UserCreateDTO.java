@@ -13,10 +13,10 @@ import javax.validation.constraints.Size;
 public class UserCreateDTO {
     @NotBlank
     @Size(min = 2, max = 250)
-    private String firstName;
+    private String firstname;
     @NotBlank
     @Size(min = 2, max = 250)
-    private String lastName;
+    private String lastname;
     @NotBlank
     @Size(min = 4, max = 250)
     private String username;

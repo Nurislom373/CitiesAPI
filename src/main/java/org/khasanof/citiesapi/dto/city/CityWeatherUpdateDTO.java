@@ -23,5 +23,5 @@ public class CityWeatherUpdateDTO {
     @Max(99)
     private Short night;
     @NotNull
-    private CityVisibility info;
+    private String info;
 }

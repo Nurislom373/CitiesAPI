@@ -12,7 +12,7 @@ public class UserGetDTO {
     private Integer id;
     private String firstName;
     private String lastName;
-    private UserRole role;
+    private String role;
     private String username;
     private String password;
 }

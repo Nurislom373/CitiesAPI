@@ -12,26 +12,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 public abstract class Auditable {
-
     @Id
     private Integer id;
-
-    @Column("is_deleted")
-    private boolean isDeleted;
-
-    @CreatedDate
-    @Column("created_at")
-    private LocalDateTime createdAt;
-
-    @CreatedBy
-    @Column("created_by")
-    private Integer createdBy = -1;
-
-    @LastModifiedDate
-    @Column("updated_at")
-    private LocalDateTime updatedAt;
-
-    @LastModifiedBy
-    @Column("updated_by")
-    private Integer updatedBy;
 }

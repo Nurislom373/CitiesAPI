@@ -3,12 +3,16 @@ package org.khasanof.citiesapi.utils.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import lombok.Getter;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+
 public class JWTUtils {
-    public static Long expiry = TimeUnit.MINUTES.toMillis(30);
+
+    // validity in milliseconds
+    public static Long expiry = TimeUnit.MINUTES.toMillis(60);
     public static String secretKey = "qwertyuiop1lkjhgfdsa2zxcvbnm3mnbvcxz4asdfghjkl5poiuytrewq";
 
     public static Date getExpiry() {

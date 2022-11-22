@@ -1,7 +1,6 @@
 package org.khasanof.citiesapi.dto.city;
 
 import lombok.*;
-import org.khasanof.citiesapi.enums.CityVisibility;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
@@ -28,7 +27,7 @@ public class CityCreateDTO {
     private Short night;
     @NotBlank
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private String date;
-    @NotNull
-    private CityVisibility info;
+    private String dateStr;
+    @NotBlank
+    private String info;
 }

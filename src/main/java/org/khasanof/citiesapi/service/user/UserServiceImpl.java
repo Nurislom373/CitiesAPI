@@ -1,15 +1,17 @@
 package org.khasanof.citiesapi.service.user;
 
 import lombok.RequiredArgsConstructor;
+import org.khasanof.citiesapi.config.encryption.PasswordEncoderConfigurer;
 import org.khasanof.citiesapi.dto.user.*;
 import org.khasanof.citiesapi.entity.user.UserEntity;
 import org.khasanof.citiesapi.enums.UserRole;
 import org.khasanof.citiesapi.repository.user.UserRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import java.util.Objects;
 
@@ -17,6 +19,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final PasswordEncoderConfigurer encoderConfigurer;
     private final UserRepository repository;
 
     @Override
@@ -27,8 +30,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<Void> register(UserCreateDTO dto) {
         UserEntity entity = new UserEntity();
+        entity.setUsername(dto.getUsername());
+        entity.setFirstname(dto.getFirstname());
+        entity.setLastname(dto.getLastname());
         entity.setRole(UserRole.USER.getValue());
-        BeanUtils.copyProperties(dto, entity);
+        entity.setPassword(encoderConfigurer.encoder().encode(dto.getPassword()));
         return repository.save(entity)
                 .then();
     }
@@ -65,5 +71,19 @@ public class UserServiceImpl implements UserService {
         if (Objects.isNull(id) || id > 1) {
             throw new RuntimeException("Invalid ID!");
         }
+    }
+
+    @Override
+    public Mono<UserDetails> findByUsername(String username) {
+        return repository.findByUsername(username)
+                .map(u -> User.withUsername(u.getUsername())
+                        .password(u.getPassword())
+                        .authorities(u.getRole())
+                        .accountExpired(false)
+                        .credentialsExpired(false)
+                        .disabled(false)
+                        .accountLocked(false)
+                        .build()
+                );
     }
 }

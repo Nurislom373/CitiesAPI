@@ -1,7 +1,6 @@
 package org.khasanof.citiesapi.dto.city;
 
 import lombok.*;
-import org.khasanof.citiesapi.enums.CityVisibility;
 
 import java.util.Date;
 
@@ -16,5 +15,5 @@ public class CityGetDTO {
     private Short day;
     private Short night;
     private Date date;
-    private CityVisibility info;
+    private String info;
 }

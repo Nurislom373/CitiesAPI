@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -47,13 +49,11 @@ public class CityServiceImpl implements CityService {
     }
 
     private CityEntity mapToEntity(CityWeatherUpdateDTO dto, CityEntity entity) {
-        entity.setUpdatedAt(LocalDateTime.now());
         BeanUtils.copyProperties(dto, entity, "id");
         return entity;
     }
 
     private CityEntity mapToEntity(CityUpdateDTO dto, CityEntity entity) {
-        entity.setUpdatedAt(LocalDateTime.now());
         BeanUtils.copyProperties(dto, entity, "id");
         return entity;
     }
@@ -65,7 +65,9 @@ public class CityServiceImpl implements CityService {
     }
 
     private CityEntity returnToEntity(CityCreateDTO dto) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         CityEntity entity = new CityEntity();
+        entity.setDate(LocalDate.parse(dto.getDateStr(), dateTimeFormatter));
         BeanUtils.copyProperties(dto, entity);
         return entity;
     }
