@@ -5,7 +5,6 @@ import org.khasanof.citiesapi.dto.subscription.SubscriptionCreateDTO;
 import org.khasanof.citiesapi.dto.subscription.SubscriptionGetDTO;
 import org.khasanof.citiesapi.service.subscription.SubscriptionService;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -19,7 +18,7 @@ public class SubscriptionController extends AbstractController<SubscriptionServi
     }
 
     @RequestMapping(value = "getSubscription/{id}", method = RequestMethod.GET)
-    public Flux<SubscriptionGetDTO> get(@PathVariable Integer id) {
+    public Mono<SubscriptionGetDTO> get(@PathVariable Integer id) {
         return service.getSubscriptions(id);
     }
 

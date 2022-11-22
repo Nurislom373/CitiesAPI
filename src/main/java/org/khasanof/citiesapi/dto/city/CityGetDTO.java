@@ -2,6 +2,7 @@ package org.khasanof.citiesapi.dto.city;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -14,6 +15,6 @@ public class CityGetDTO {
     private String country;
     private Short day;
     private Short night;
-    private Date date;
+    private LocalDate date;
     private String info;
 }

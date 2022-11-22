@@ -22,21 +22,41 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public Mono<Void> subscribeToCity(SubscriptionCreateDTO dto) {
-        checkSubCrDTO(dto);
-        SubscriptionEntity entity = new SubscriptionEntity();
-        BeanUtils.copyProperties(dto, entity);
-        return repository.save(entity).then();
+        return userRepository.existsById(dto.getUserId()).map((user) -> {
+                    if (!user) {
+                        throw new RuntimeException("User not found");
+                    } else {
+                        return dto.getCityId();
+                    }
+                }).flatMap(cityRepository::existsById).map(city -> {
+                    if (!city) {
+                        throw new RuntimeException("City not found");
+                    } else {
+                        return dto;
+                    }
+                }).flatMap(obj -> repository.existsByUserIdAndCityId(obj.getUserId(), obj.getCityId()))
+                .map((val) -> {
+                    if (val) {
+                        throw new RuntimeException("Already Created Subscription");
+                    } else {
+                        return dto;
+                    }
+                }).flatMap(val -> Mono.just(val)
+                        .map(o -> {
+                            SubscriptionEntity subscription = new SubscriptionEntity();
+                            BeanUtils.copyProperties(o, subscription);
+                            return subscription;
+                        })).flatMap(repository::save).then();
     }
 
     @Override
     public Flux<SubscriptionGetDTO> getSubscriptions(Integer userId) {
-        return null;
+        return repository.findAllByUserId(userId)
+                .map(o -> {
+                    SubscriptionGetDTO dto = new SubscriptionGetDTO();
+                    BeanUtils.copyProperties(o, dto);
+                    return dto;
+                });
     }
 
-    private void checkSubCrDTO(SubscriptionCreateDTO dto) {
-        userRepository.existsById(dto.getUserId()).map(o -> !o)
-                .onErrorResume(e -> Mono.error(new RuntimeException("User not found")));
-        cityRepository.existsById(dto.getCityId()).map(o -> !o)
-                .onErrorResume(e -> Mono.error(new RuntimeException("City not found")));
-    }
 }

@@ -3,12 +3,12 @@ package org.khasanof.citiesapi.utils.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import lombok.Getter;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-
+@Component
 public class JWTUtils {
 
     // validity in milliseconds
