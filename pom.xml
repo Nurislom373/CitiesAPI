@@ -25,10 +25,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-security</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-webflux-ui</artifactId>
@@ -54,6 +54,16 @@
             <groupId>org.postgresql</groupId>
             <artifactId>r2dbc-postgresql</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-maven-plugin</artifactId>
+            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -89,6 +99,14 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <propertyFile>src/main/resources/liquibase.properties</propertyFile>
                 </configuration>
             </plugin>
         </plugins>

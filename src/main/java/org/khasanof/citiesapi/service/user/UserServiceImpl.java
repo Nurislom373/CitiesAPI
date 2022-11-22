@@ -25,26 +25,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Mono<Void> register(Mono<UserCreateDTO> mono) {
-        return mono.map((obj) -> {
-                    UserEntity entity = new UserEntity();
-                    entity.setRole(UserRole.USER);
-                    BeanUtils.copyProperties(obj, entity);
-                    return entity;
-                }).flatMap(repository::save)
+    public Mono<Void> register(UserCreateDTO dto) {
+        UserEntity entity = new UserEntity();
+        entity.setRole(UserRole.USER.getValue());
+        BeanUtils.copyProperties(dto, entity);
+        return repository.save(entity)
                 .then();
     }
 
     @Override
-    public Mono<Void> update(Mono<UserUpdateDTO> mono) {
-        return mono.flatMap(dto -> Mono.just(dto)
-                .publishOn(Schedulers.boundedElastic())
-                .mapNotNull((obj) -> repository.findById(obj.getId())
-                        .block())
+    public Mono<Void> update(UserUpdateDTO dto) {
+        return repository.findById(dto.getId())
                 .flatMap(entity -> {
                     BeanUtils.copyProperties(dto, entity, "id");
                     return Mono.just(entity);
-                }).map(repository::save).then());
+                }).map(repository::save).then();
     }
 
     @Override

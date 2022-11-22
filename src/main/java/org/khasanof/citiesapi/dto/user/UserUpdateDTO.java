@@ -25,7 +25,4 @@ public class UserUpdateDTO {
     @NotBlank
     @Size(min = 4, max = 250)
     private String username;
-    @NotBlank
-    @Size(min = 4, max = 250)
-    private String password;
 }

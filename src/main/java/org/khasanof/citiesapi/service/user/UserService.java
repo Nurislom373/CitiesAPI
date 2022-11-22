@@ -9,9 +9,9 @@ public interface UserService extends BaseService {
 
     Mono<Object> login(UserRequestDTO dto);
 
-    Mono<Void> register(Mono<UserCreateDTO> mono);
+    Mono<Void> register(UserCreateDTO dto);
 
-    Mono<Void> update(Mono<UserUpdateDTO> mono);
+    Mono<Void> update(UserUpdateDTO dto);
 
     Mono<UserDetailDTO> detail(Integer id);
 

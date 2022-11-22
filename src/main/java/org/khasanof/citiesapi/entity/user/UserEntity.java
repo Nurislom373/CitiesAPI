@@ -17,7 +17,7 @@ public class UserEntity extends Auditable {
     private String firstName;
     @Column(value = "last_name")
     private String lastName;
-    private UserRole role;
+    private String role;
     private String username;
     private String password;
 }
