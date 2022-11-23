@@ -1,6 +1,7 @@
 package org.khasanof.citiesapi.controller.user;
 
 import org.khasanof.citiesapi.controller.AbstractController;
+import org.khasanof.citiesapi.controller.subscription.SubscriptionController;
 import org.khasanof.citiesapi.dto.user.*;
 import org.khasanof.citiesapi.service.user.UserService;
 import org.khasanof.citiesapi.utils.jwt.JwtTokenProvider;
@@ -17,6 +18,14 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.Map;
 
+/**
+ * This Controller class is used to handle requests to city APIs.
+ * The AbstractController class accepts only services that extend from BaseService.
+ *
+ * @author Khasanof373
+ * @see UserController
+ * @since 1.0
+ */
 @RestController
 @RequestMapping(value = "/user/*")
 public class UserController extends AbstractController<UserService> {
@@ -30,6 +39,13 @@ public class UserController extends AbstractController<UserService> {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * This method is used to get a token for registered users through the register method.
+     *
+     * @param mono -> UserRequestDTO comes from the corresponding request body
+     * @return Mono<Object>
+     * @since 1.0
+     */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public Mono<Object> login(@Valid @RequestBody Mono<UserRequestDTO> mono) {
         return mono.flatMap(login -> this.authenticationManager
@@ -41,21 +57,48 @@ public class UserController extends AbstractController<UserService> {
         });
     }
 
+    /**
+     * This method sends the DTO to the service's register method.
+     *
+     * @param dto -> UserCreateDTO comes from the corresponding request body
+     * @return Mono<Void>
+     * @since 1.0
+     */
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public Mono<Void> register(@Valid @RequestBody UserCreateDTO dto) {
         return service.register(dto);
     }
 
+    /**
+     * This method sends the DTO to the service's update method.
+     *
+     * @param dto -> UserUpdateDTO comes from the corresponding request body
+     * @return Mono<Void>
+     * @since 1.0
+     */
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Mono<Void> update(@Valid @RequestBody UserUpdateDTO dto) {
         return service.update(dto);
     }
 
+    /**
+     * This method sends the DTO to the service's detail method.
+     *
+     * @param id -> Incoming id cannot be less than one.
+     * @return Mono<UserDetailDTO>
+     * @since 1.0
+     */
     @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
     public Mono<UserDetailDTO> detail(@PathVariable Integer id) {
         return service.detail(id);
     }
 
+    /**
+     * This method is used to return the result.
+     *
+     * @return Flux<UserGetDTO>
+     * @since 1.0
+     */
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public Flux<UserGetDTO> list() {
         return service.list();

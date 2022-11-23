@@ -15,8 +15,8 @@ import java.time.LocalDate;
 public class CityEntity extends Auditable {
     private String city;
     private String country;
-    private Short day;
-    private Short night;
+    private Integer day;
+    private Integer night;
     private LocalDate date;
     private String info;
 }

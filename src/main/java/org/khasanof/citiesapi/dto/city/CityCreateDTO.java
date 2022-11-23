@@ -20,11 +20,11 @@ public class CityCreateDTO {
     @NotNull
     @Min(-99)
     @Max(99)
-    private Short day;
+    private Integer day;
     @NotNull
     @Min(-99)
     @Max(99)
-    private Short night;
+    private Integer night;
     @NotBlank
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String dateStr;

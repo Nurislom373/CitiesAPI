@@ -3,8 +3,8 @@ package org.khasanof.citiesapi.service.subscription;
 import lombok.RequiredArgsConstructor;
 import org.khasanof.citiesapi.dto.city.CityGetDTO;
 import org.khasanof.citiesapi.dto.subscription.SubscriptionCreateDTO;
-import org.khasanof.citiesapi.dto.subscription.SubscriptionGetDTO;
 import org.khasanof.citiesapi.entity.subscription.SubscriptionEntity;
+import org.khasanof.citiesapi.exception.exception.AlreadyExistException;
 import org.khasanof.citiesapi.exception.exception.NotFoundException;
 import org.khasanof.citiesapi.repository.city.CityRepository;
 import org.khasanof.citiesapi.repository.subscription.SubscriptionRepository;
@@ -12,11 +12,16 @@ import org.khasanof.citiesapi.repository.user.UserRepository;
 import org.khasanof.citiesapi.service.city.CityService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * This class is used for manipulation on the subscription entity.
+ *
+ * @author Khasanof373
+ * @see SubscriptionServiceImpl
+ * @since 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class SubscriptionServiceImpl implements SubscriptionService {
@@ -26,6 +31,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private final CityRepository cityRepository;
     private final CityService cityService;
 
+    /*
+     * (non-Javadoc)
+     * @see org.khasanof.citiesapi.service.subscription.SubscriptionService#subscribeToCity(dto.subscription.SubscriptionCreateDTO)
+     */
     @Override
     public Mono<Void> subscribeToCity(SubscriptionCreateDTO dto) {
         return userRepository.existsById(dto.getUserId()).map((user) -> {
@@ -43,7 +52,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                 }).flatMap(obj -> repository.existsByUserIdAndCityId(obj.getUserId(), obj.getCityId()))
                 .map((val) -> {
                     if (val) {
-                        throw new RuntimeException("Already Created Subscription");
+                        throw new AlreadyExistException("Already Created Subscription");
                     } else {
                         return dto;
                     }
@@ -55,16 +64,15 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                         })).flatMap(repository::save).then();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.khasanof.citiesapi.service.subscription.SubscriptionService#getSubscriptions(java.lang.Integer)
+     */
     @Override
-    public Mono<SubscriptionGetDTO> getSubscriptions(Integer userId) {
+    public Flux<CityGetDTO> getSubscriptions(Integer userId) {
         return repository.findAllByUserId(userId)
                 .switchIfEmpty(Mono.error(new NotFoundException("Subscription not found!")))
-                .flatMap((subEntity) -> {
-                    List<CityGetDTO> cities = new ArrayList<>();
-                    return cityService.getDTO(subEntity.getCityId())
-                            .map(cities::add)
-                            .map((o) -> new SubscriptionGetDTO(userId, cities));
-                }).single();
+                .flatMap((subEntity) -> cityService.get(subEntity.getCityId()));
     }
 
 }

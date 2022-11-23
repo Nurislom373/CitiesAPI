@@ -17,11 +17,11 @@ public class CityWeatherUpdateDTO {
     @NotNull
     @Min(-99)
     @Max(99)
-    private Short day;
+    private Integer day;
     @NotNull
     @Min(-99)
     @Max(99)
-    private Short night;
+    private Integer night;
     @NotNull
     private String info;
 }

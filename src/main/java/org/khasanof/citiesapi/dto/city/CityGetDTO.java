@@ -11,10 +11,11 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 public class CityGetDTO {
+    private Integer id;
     private String city;
     private String country;
-    private Short day;
-    private Short night;
+    private Integer day;
+    private Integer night;
     private LocalDate date;
     private String info;
 }

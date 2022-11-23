@@ -8,6 +8,7 @@ import org.khasanof.citiesapi.dto.user.UserGetDTO;
 import org.khasanof.citiesapi.dto.user.UserUpdateDTO;
 import org.khasanof.citiesapi.entity.user.UserEntity;
 import org.khasanof.citiesapi.enums.UserRole;
+import org.khasanof.citiesapi.exception.exception.InvalidValidationException;
 import org.khasanof.citiesapi.exception.exception.NotFoundException;
 import org.khasanof.citiesapi.repository.user.UserRepository;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +20,14 @@ import reactor.core.publisher.Mono;
 
 import java.util.Objects;
 
+
+/**
+ * This class is used for manipulation on the user entity.
+ *
+ * @author Khasanof373
+ * @see UserServiceImpl
+ * @since 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -26,6 +35,10 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoderConfigurer encoderConfigurer;
     private final UserRepository repository;
 
+    /*
+     * (non-Javadoc)
+     * @see org.khasanof.citiesapi.service.user.UserService#register(dto.user.UserCreateDTO)
+     */
     @Override
     public Mono<Void> register(UserCreateDTO dto) {
         UserEntity entity = new UserEntity();
@@ -38,6 +51,10 @@ public class UserServiceImpl implements UserService {
                 .then();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.khasanof.citiesapi.service.user.UserService#update(dto.user.UserUpdateDTO)
+     */
     @Override
     public Mono<Void> update(UserUpdateDTO dto) {
         return repository.findById(dto.getId())
@@ -46,13 +63,10 @@ public class UserServiceImpl implements UserService {
                         .flatMap(repository::save)).then();
     }
 
-    private Mono<UserEntity> swapToObj(UserUpdateDTO dto, UserEntity entity) {
-        entity.setUsername(dto.getUsername());
-        entity.setLastname(dto.getLastName());
-        entity.setFirstname(dto.getFirstName());
-        return Mono.just(entity);
-    }
-
+    /*
+     * (non-Javadoc)
+     * @see org.khasanof.citiesapi.service.user.UserService#detail(java.lang.Integer)
+     */
     @Override
     public Mono<UserDetailDTO> detail(Integer id) {
         checkId(id);
@@ -65,6 +79,10 @@ public class UserServiceImpl implements UserService {
                 });
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.khasanof.citiesapi.service.user.UserService#list()
+     */
     @Override
     public Flux<UserGetDTO> list() {
         return repository.findAll().map((obj) -> {
@@ -74,12 +92,10 @@ public class UserServiceImpl implements UserService {
         });
     }
 
-    private void checkId(Integer id) {
-        if (Objects.isNull(id) || id < 1) {
-            throw new RuntimeException("Invalid ID!");
-        }
-    }
-
+    /*
+     * (non-Javadoc)
+     * @see org.khasanof.citiesapi.service.user.ReactiveUserDetailsService#findByUsername(java.lang.String)
+     */
     @Override
     public Mono<UserDetails> findByUsername(String username) {
         return repository.findByUsername(username)
@@ -93,5 +109,32 @@ public class UserServiceImpl implements UserService {
                         .accountLocked(false)
                         .build()
                 );
+    }
+
+    /**
+     * This method is used to swap the dto entity
+     *
+     * @param dto -> UserUpdateDTO comes in and all its fields must be not null
+     * @param entity -> UserEntity comes in and all its fields must be not null
+     * @return Mono<UserEntity>
+     * @since 1.0
+     */
+    private Mono<UserEntity> swapToObj(UserUpdateDTO dto, UserEntity entity) {
+        entity.setUsername(dto.getUsername());
+        entity.setLastname(dto.getLastName());
+        entity.setFirstname(dto.getFirstName());
+        return Mono.just(entity);
+    }
+
+    /**
+     * This method is used to check id.
+     *
+     * @param id -> Incoming id cannot be less than one.
+     * @since 1.0
+     */
+    private void checkId(Integer id) {
+        if (Objects.isNull(id) || id < 1) {
+            throw new InvalidValidationException("Invalid ID!");
+        }
     }
 }
