@@ -42,7 +42,6 @@ public class SecurityConfigurer {
                 .authenticationManager(manager)
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .authorizeExchange(ex -> ex.pathMatchers(WHITE_LIST).permitAll()
-                        .pathMatchers("/city/list").hasRole("ADMIN")
                         .anyExchange().authenticated())
                 .addFilterAt(new JwtAuthenticationFilter(tokenProvider), SecurityWebFiltersOrder.HTTP_BASIC)
                 .build();

@@ -4,6 +4,8 @@ You can test apis with swagger ui: http://localhost:8080/ui
 
 ![img](etc/img.png)
 
+You can see Docs written to the services and controller classes, as well as others.
+
 ## Liquibase 
 
 I disabled liquibase because it takes an extra 20 seconds to start the program. 
