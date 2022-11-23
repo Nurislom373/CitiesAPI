@@ -6,6 +6,7 @@ import org.khasanof.citiesapi.dto.city.CityGetDTO;
 import org.khasanof.citiesapi.dto.city.CityUpdateDTO;
 import org.khasanof.citiesapi.dto.city.CityWeatherUpdateDTO;
 import org.khasanof.citiesapi.service.city.CityService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @RestController

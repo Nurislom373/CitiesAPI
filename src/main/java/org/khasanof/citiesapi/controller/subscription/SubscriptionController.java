@@ -5,6 +5,7 @@ import org.khasanof.citiesapi.dto.subscription.SubscriptionCreateDTO;
 import org.khasanof.citiesapi.dto.subscription.SubscriptionGetDTO;
 import org.khasanof.citiesapi.service.subscription.SubscriptionService;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;

@@ -16,6 +16,8 @@ public interface CityService extends BaseService {
 
     Mono<Void> updateWeather(CityWeatherUpdateDTO dto);
 
+    Mono<CityGetDTO> getDTO(Integer id);
+
     Flux<CityGetDTO> list();
 
 }

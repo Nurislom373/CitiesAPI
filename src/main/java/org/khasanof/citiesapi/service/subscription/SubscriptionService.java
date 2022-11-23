@@ -10,6 +10,6 @@ public interface SubscriptionService extends BaseService {
 
     Mono<Void> subscribeToCity(SubscriptionCreateDTO dto);
 
-    Flux<SubscriptionGetDTO> getSubscriptions(Integer userId);
+    Mono<SubscriptionGetDTO> getSubscriptions(Integer userId);
 
 }

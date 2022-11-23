@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class JWTUtils {
+public class JwtUtils {
 
     // validity in milliseconds
     public static Long expiry = TimeUnit.MINUTES.toMillis(60);

@@ -6,6 +6,7 @@ import org.khasanof.citiesapi.dto.city.CityGetDTO;
 import org.khasanof.citiesapi.dto.city.CityUpdateDTO;
 import org.khasanof.citiesapi.dto.city.CityWeatherUpdateDTO;
 import org.khasanof.citiesapi.entity.city.CityEntity;
+import org.khasanof.citiesapi.exception.exception.NotFoundException;
 import org.khasanof.citiesapi.repository.city.CityRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -30,15 +31,24 @@ public class CityServiceImpl implements CityService {
     @Override
     public Mono<Void> update(CityUpdateDTO dto) {
         return repository.findById(dto.getId())
-                .mapNotNull((o) -> mapToEntity(dto, o))
+                .switchIfEmpty(Mono.error(new NotFoundException("City not found")))
+                .map((o) -> mapToEntity(dto, o))
                 .flatMap(repository::save).then();
     }
 
     @Override
     public Mono<Void> updateWeather(CityWeatherUpdateDTO dto) {
         return repository.findById(dto.getId())
-                .mapNotNull((o) -> mapToEntity(dto, o))
+                .switchIfEmpty(Mono.error(new NotFoundException("City not found")))
+                .map((o) -> mapToEntity(dto, o))
                 .flatMap(repository::save).then();
+    }
+
+    @Override
+    public Mono<CityGetDTO> getDTO(Integer id) {
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(new NotFoundException("City not found")))
+                .map(this::returnToGetDTO);
     }
 
     @Override

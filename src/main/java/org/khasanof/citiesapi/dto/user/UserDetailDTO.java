@@ -12,11 +12,9 @@ import java.time.LocalDateTime;
 @ToString
 public class UserDetailDTO {
     private Integer id;
-    private String firstName;
-    private String lastName;
+    private String firstname;
+    private String lastname;
+    private String role;
     private String username;
     private String password;
-    private String role;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

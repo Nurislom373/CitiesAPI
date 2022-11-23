@@ -10,9 +10,7 @@ import org.khasanof.citiesapi.enums.UserRole;
 @ToString
 public class UserGetDTO {
     private Integer id;
-    private String firstName;
-    private String lastName;
-    private String role;
+    private String firstname;
+    private String lastname;
     private String username;
-    private String password;
 }

@@ -1,11 +1,14 @@
 package org.khasanof.citiesapi.config.security;
 
+import org.khasanof.citiesapi.utils.jwt.JwtAuthenticationFilter;
+import org.khasanof.citiesapi.utils.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,15 +22,14 @@ public class SecurityConfigurer {
 
     public final String[] WHITE_LIST = {
             "/ui",
-            "/user/**",
-            "/city/**",
-            "/subscription/**",
+            "/user/login",
+            "/user/register",
             "/webjars/**",
             "/api-docs/**"
     };
 
     @Bean
-    public SecurityWebFilterChain webFilterChain(ServerHttpSecurity http, ReactiveAuthenticationManager manager) {
+    public SecurityWebFilterChain webFilterChain(ServerHttpSecurity http, ReactiveAuthenticationManager manager, JwtTokenProvider tokenProvider) {
         return http.exceptionHandling()
                 .authenticationEntryPoint((swe, e) ->
                         Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED))
@@ -41,6 +43,7 @@ public class SecurityConfigurer {
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .authorizeExchange(ex -> ex.pathMatchers(WHITE_LIST).permitAll()
                         .anyExchange().authenticated())
+                .addFilterAt(new JwtAuthenticationFilter(tokenProvider), SecurityWebFiltersOrder.HTTP_BASIC)
                 .build();
     }
 
