@@ -34,7 +34,6 @@ public class CityControllerTest {
                 .bodyValue(content)
                 .exchange()
                 .expectStatus().isOk();
-
     }
 
     @Test
@@ -47,7 +46,6 @@ public class CityControllerTest {
                 .bodyValue(content)
                 .exchange()
                 .expectStatus().isOk();
-
     }
 
     @Test
@@ -60,7 +58,6 @@ public class CityControllerTest {
                 .bodyValue(content)
                 .exchange()
                 .expectStatus().isNotFound();
-
     }
 
     @Test
