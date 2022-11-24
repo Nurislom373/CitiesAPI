@@ -4,6 +4,10 @@ You can test apis with swagger ui: http://localhost:8080/ui
 
 ![img](etc/img.png)
 
+### Admin
+
+Default Admin User -> Username: string, Password: string
+
 You can see Docs written to the services and controller classes, as well as others.
 
 ## Liquibase 
