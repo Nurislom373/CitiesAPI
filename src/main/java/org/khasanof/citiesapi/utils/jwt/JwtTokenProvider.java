@@ -27,12 +27,14 @@ public class JwtTokenProvider {
         Date expiry = JwtUtils.getExpiry();
         String username = authentication.getName();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        List<String> collect = authorities.stream()
+                .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        System.out.println("collect = " + collect);
 
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(expiry)
-                .withClaim("role", authorities.stream()
-                        .map(GrantedAuthority::getAuthority).collect(Collectors.toList()).get(0))
+                .withClaim("role", collect)
                 .sign(JwtUtils.getAlgorithm());
     }
 
@@ -42,16 +44,17 @@ public class JwtTokenProvider {
         String username = jwt.getSubject();
 
         List<String> roles;
-        if (Objects.isNull(jwt.getClaim(AUTHORITIES_KEY).asList(String.class))) {
+        if (Objects.isNull(jwt.getClaim("role").asList(String.class))) {
             roles = new ArrayList<>();
         } else {
-            roles = jwt.getClaim(AUTHORITIES_KEY).asList(String.class);
+            roles = jwt.getClaim("role").asList(String.class);
         }
+        System.out.println("roles = " + roles);
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         for (String role : roles) {
             authorities.add(new SimpleGrantedAuthority(role));
         }
-
+        System.out.println("authorities = " + authorities);
         User principal = new User(username, "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
